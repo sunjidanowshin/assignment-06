@@ -1,6 +1,6 @@
 
 
-## Project Name :FitLog
+## Project Name : FitLog
 
 ## Short Description :
 FitLog is a workout tracking website. Here users can see different workouts,
