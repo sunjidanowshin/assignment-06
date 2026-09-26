@@ -3,6 +3,8 @@ import { useState } from "react";
 import { usePlan } from "@/context/PlanContext";
 import Link from "next/link";
 import { Workout } from "@/types/workout";
+import PlanWorkoutCard from "@/components/PlanWorkoutCard";
+
 export default function MyPlanPage() {
   const { plan, saved } = usePlan();
   const [activeTab, setActiveTab] = useState("today");
@@ -59,31 +61,44 @@ export default function MyPlanPage() {
         </div>
 
         <div className="mt-6">
-          {activeTab === "today" && plan.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-white font-bold text-lg">NOTHING HERE YET</p>
-              <p className="text-gray-400 text-sm mt-2">
-                Browse the library and add a lift to get today moving.
-              </p>
-              <Link href="/"
-                className="inline-block mt-4 bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
-                Go to workouts
-              </Link>
-            </div>
+          {activeTab === "today" && (
+            plan.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-white font-bold text-lg">NOTHING HERE YET</p>
+                <p className="text-gray-400 text-sm mt-2">
+                  Browse the library and add a lift to get today moving.
+                </p>
+                <Link href="/" className="inline-block mt-4 bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
+                  Go to workouts
+                </Link>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {plan.map((workout: Workout) => (
+                  <PlanWorkoutCard key={workout.id} workout={workout} listType="plan" />
+                ))}
+              </div>
+            )
           )}
 
-          {activeTab === "saved" && saved.length === 0 && (
-            <div className="text-center py-16">
-              <p className="text-white font-bold text-lg">NOTHING HERE YET</p>
-              <p className="text-gray-400 text-sm mt-2">
-                Browse the library and add a lift to get today moving.
-              </p>
-              <Link
-                href="/"
-                className="inline-block mt-4 bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
-                Go to workouts
-              </Link>
-            </div>
+          {activeTab === "saved" && (
+            saved.length === 0 ? (
+              <div className="text-center py-16">
+                <p className="text-white font-bold text-lg">NOTHING HERE YET</p>
+                <p className="text-gray-400 text-sm mt-2">
+                  Browse the library and add a lift to get today moving.
+                </p>
+                <Link href="/" className="inline-block mt-4 bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
+                  Go to workouts
+                </Link>
+              </div>
+            ) : (
+              <div className="flex flex-col gap-3">
+                {saved.map((workout: Workout) => (
+                  <PlanWorkoutCard key={workout.id} workout={workout} listType="saved" />
+                ))}
+              </div>
+            )
           )}
         </div>
       </div>
