@@ -5,7 +5,7 @@ export default function Banner() {
     <section className=" px-4 md:px-8 py-8">
       <div className="max-w-7xl mx-auto bg-zinc-900 rounded-3xl px-6 md:px-12 py-10 md:py-16">
         <div className="grid md:grid-cols-2 gap-10 items-center">
-          {/* Left: text content */}
+      
           <div>
             <p className="text-lime-400 text-sm font-semibold tracking-wide mb-3">
               WORKOUT LIBRARY
@@ -29,7 +29,7 @@ export default function Banner() {
         </a>
           </div>
 
-          {/* Right: banner image */}
+      
           <div className="relative w-full h-64 md:h-96">
             <Image
               src="/assets/banner.png"
