@@ -7,15 +7,18 @@ import { Workout } from "@/types/workout";
 export default function PlanWorkoutCard({
   workout,
   listType,
+  onAction,
 }: {
   workout: Workout;
   listType: "plan" | "saved";
+  onAction: (message: string) => void;
 }) {
   const { removeFromPlan, removeFromSaved, markAsDone, doneIds } = usePlan();
 
   const isDone = doneIds.includes(workout.id);
 
   function handleRemove() {
+    onAction(`${workout.name} removed`);
     if (listType === "plan") {
       removeFromPlan(workout.id);
     } else {
@@ -25,6 +28,7 @@ export default function PlanWorkoutCard({
 
   function handleMarkDone() {
     markAsDone(workout.id);
+    onAction(`${workout.name} marked as done`);
   }
 
   return (

@@ -1,5 +1,5 @@
 "use client";
-import { useState, useMemo } from "react";
+import { useState, useMemo, useEffect } from "react";
 import { usePlan } from "@/context/PlanContext";
 import Link from "next/link";
 import { Workout } from "@/types/workout";
@@ -11,6 +11,18 @@ export default function MyPlanPage() {
   const { plan, saved } = usePlan();
   const [activeTab, setActiveTab] = useState("today");
   const [sortBy, setSortBy] = useState<SortOption>("duration");
+  const [isLoading, setIsLoading] = useState(true);
+  const [toast, setToast] = useState("");
+
+  useEffect(() => {
+    const timer = setTimeout(() => setIsLoading(false), 500);
+    return () => clearTimeout(timer);
+  }, []);
+
+  function showToast(message: string) {
+    setToast(message);
+    setTimeout(() => setToast(""), 2000);
+  }
 
   const activeList = activeTab === "today" ? plan : saved;
 
@@ -19,7 +31,7 @@ export default function MyPlanPage() {
     list.sort((a: Workout, b: Workout) => {
       if (sortBy === "duration") return a.duration - b.duration;
       if (sortBy === "calories") return a.caloriesBurned - b.caloriesBurned;
-      if (sortBy === "rating") return b.rating - a.rating; // highest rating first
+      if (sortBy === "rating") return b.rating - a.rating;
       return 0;
     });
     return list;
@@ -95,46 +107,70 @@ export default function MyPlanPage() {
         </div>
 
         <div className="mt-6">
-          {activeTab === "today" && (
-            sortedList.length === 0 ? (
-              <div className="text-center py-16">
-                <p className="text-white font-bold text-lg">NOTHING HERE YET</p>
-                <p className="text-gray-400 text-sm mt-2">
-                  Browse the library and add a lift to get today moving.
-                </p>
-                <Link href="/" className="inline-block mt-4 bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
-                  Go to workouts
-                </Link>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {sortedList.map((workout: Workout) => (
-                  <PlanWorkoutCard key={workout.id} workout={workout} listType="plan" />
-                ))}
-              </div>
-            )
-          )}
+          {isLoading ? (
+            <div className="text-center py-16">
+              <p className="text-gray-400 text-sm">Loading workouts…</p>
+            </div>
+          ) : (
+            <>
+              {activeTab === "today" && (
+                sortedList.length === 0 ? (
+                  <div className="text-center py-16">
+                    <p className="text-white font-bold text-lg">NOTHING HERE YET</p>
+                    <p className="text-gray-400 text-sm mt-2">
+                      Browse the library and add a lift to get today moving.
+                    </p>
+                    <Link href="/" className="inline-block mt-4 bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
+                      Go to workouts
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    {sortedList.map((workout: Workout) => (
+                      <PlanWorkoutCard
+                        key={workout.id}
+                        workout={workout}
+                        listType="plan"
+                        onAction={showToast}
+                      />
+                    ))}
+                  </div>
+                )
+              )}
 
-          {activeTab === "saved" && (
-            sortedList.length === 0 ? (
-              <div className="text-center py-16">
-                <p className="text-white font-bold text-lg">NOTHING HERE YET</p>
-                <p className="text-gray-400 text-sm mt-2">
-                  Browse the library and add a lift to get today moving.
-                </p>
-                <Link href="/" className="inline-block mt-4 bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
-                  Go to workouts
-                </Link>
-              </div>
-            ) : (
-              <div className="flex flex-col gap-3">
-                {sortedList.map((workout: Workout) => (
-                  <PlanWorkoutCard key={workout.id} workout={workout} listType="saved" />
-                ))}
-              </div>
-            )
+              {activeTab === "saved" && (
+                sortedList.length === 0 ? (
+                  <div className="text-center py-16">
+                    <p className="text-white font-bold text-lg">NOTHING HERE YET</p>
+                    <p className="text-gray-400 text-sm mt-2">
+                      Browse the library and add a lift to get today moving.
+                    </p>
+                    <Link href="/" className="inline-block mt-4 bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
+                      Go to workouts
+                    </Link>
+                  </div>
+                ) : (
+                  <div className="flex flex-col gap-3">
+                    {sortedList.map((workout: Workout) => (
+                      <PlanWorkoutCard
+                        key={workout.id}
+                        workout={workout}
+                        listType="saved"
+                        onAction={showToast}
+                      />
+                    ))}
+                  </div>
+                )
+              )}
+            </>
           )}
         </div>
+
+        {toast && (
+          <div className="fixed bottom-6 right-6 bg-white text-black px-4 py-3 rounded-lg shadow-lg text-sm font-medium">
+            {toast}
+          </div>
+        )}
       </div>
     </section>
   );

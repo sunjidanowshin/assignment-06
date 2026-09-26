@@ -10,7 +10,7 @@ export default function NotFound() {
         Lift Not Found
       </h1>
       <p className="text-gray-400 max-w-md mb-8">
-        Looks like this page skipped leg day. The route you&apos;re looking for
+    Looks like there is an error. The route you&apos;re looking for
         doesn&apos;t exist.
       </p>
       <Link
