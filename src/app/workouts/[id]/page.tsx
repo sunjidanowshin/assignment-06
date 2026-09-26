@@ -1,5 +1,5 @@
 import { Workout } from "@/types/workout";
-
+import AddButtons from "@/components/AddButtons";
 async function getWorkout(id: string): Promise<Workout> {
   const res = await fetch(`https://api.abcz.workers.dev/api/fitlog/${id}`);
   return res.json();
@@ -72,15 +72,8 @@ export default async function WorkoutDetailPage({
             ))}
           </ol>
 
-        
-          <div className="flex gap-4 mt-6">
-            <button className="bg-lime-400 text-black px-5 py-2.5 rounded-full text-sm font-semibold">
-              + Add to today&apos;s plan
-            </button>
-            <button className="border border-white/30 text-white px-5 py-2.5 rounded-full text-sm font-semibold">
-              🔖 Save for later
-            </button>
-          </div>
+        <AddButtons workout={workout} />
+          
         </div>
       </div>
     </section>
