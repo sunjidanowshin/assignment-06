@@ -1,10 +1,13 @@
 import Image from "next/image";
 import { Workout } from "@/types/workout";
-
+import Link from "next/link";
 export default function WorkoutCard({ workout }: { workout: Workout }) {
-  return (
+  return (<Link
+      href={`/workouts/${workout.id}`}
+      className="bg-zinc-900 rounded-2xl overflow-hidden block hover:opacity-90 transition"
+    >
     <div className="bg-zinc-900 rounded-2xl overflow-hidden">
-      {/* Image */}
+    
       <div className="relative w-full h-48">
         <Image
           src={workout.image}
@@ -12,7 +15,7 @@ export default function WorkoutCard({ workout }: { workout: Workout }) {
           fill
           className="object-cover"
         />
-        {/* Category tags — overlaid on image */}
+    
         <div className="absolute top-3 left-3 flex gap-2">
           {workout.muscleGroups.map((tag) => (
             <span
@@ -25,7 +28,6 @@ export default function WorkoutCard({ workout }: { workout: Workout }) {
         </div>
       </div>
 
-      {/* Info */}
       <div className="p-4">
         <h3 className="text-white font-bold text-lg uppercase">
           {workout.name}
@@ -39,5 +41,6 @@ export default function WorkoutCard({ workout }: { workout: Workout }) {
         </div>
       </div>
     </div>
+    </Link>
   );
 }
